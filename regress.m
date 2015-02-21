@@ -1,7 +1,8 @@
 
 clear ; close all; clc
 fileList = readdir('/home/pratikku/test/macu/metrics');
-for i = 3:numel(fileList),
+for i = 3908:numel(fileList),
+    i
     fileList{i}
     data = load(strcat('/home/pratikku/test/macu/metrics/',fileList{i}));
     %Read data
@@ -28,7 +29,10 @@ for i = 3:numel(fileList),
     [theta, J_history] = gradientDescent(X_norm, y, initial_theta, lambda, alpha, iters);
 
     y_predict = X_norm * theta;
-
+    
+    deviation = sort(abs(y_predict - y));
+    dev_idx = floor(0.85 * length(deviation)); 
+    avg_dev = mean(deviation(1:dev_idx));
     %figure;
 
     %subplot(2,1,1);
@@ -37,8 +41,8 @@ for i = 3:numel(fileList),
     %subplot(2,1,2);
     %plot(X(:,1), y, 'rx');
     
-    %save theta, mu_t, sigma_t in a file
+    %save theta, mu_t, sigma_t, avg_dev in a file 
     output_file = strcat('/home/pratikku/test/macu/hypotheses/',fileList{i},'.mat')
-    save(output_file, "theta", "mu_t", "sigma_t");
+    save(output_file, "theta", "mu_t", "sigma_t","avg_dev");
     
 end
